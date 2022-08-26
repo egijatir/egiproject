@@ -34,9 +34,9 @@ class _HomeState extends State<Home> {
         title: Text("Al Quran App"),
         centerTitle: true,
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
-        backgroundColor: Color.fromARGB(255, 42, 2, 66),
+        //  ,
       ),
-      backgroundColor: Colors.black,
+      // backgroundColor: Colors.black,
       body: DefaultTabController(
         length: 3,
         child: Padding(
@@ -46,7 +46,7 @@ class _HomeState extends State<Home> {
             children: [
               Text(
                 "Assalamualaikum",
-                style: TextStyle(color: Colors.white, fontSize: 20),
+                style: TextStyle(fontSize: 20),
               ),
               SizedBox(
                 height: 20,
@@ -74,7 +74,7 @@ class _HomeState extends State<Home> {
                               opacity: 0.7,
                               child: Container(
                                 margin: EdgeInsets.only(top: 40),
-                                width: 150,
+                                width: MediaQuery.of(context).size.width * 0.30,
                                 child: Image.asset(
                                   "assets/quran.png",
                                   fit: BoxFit.contain,
@@ -103,13 +103,11 @@ class _HomeState extends State<Home> {
                                 SizedBox(height: 0),
                                 Text(
                                   "Al-Fatihah",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20),
+                                  style: TextStyle(fontSize: 20),
                                 ),
                                 Text(
                                   "Jus 2 , Ayat 5",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20),
+                                  style: TextStyle(fontSize: 20),
                                 )
                               ],
                             ),
@@ -161,11 +159,11 @@ class _HomeState extends State<Home> {
                               ),
                               title: Text(
                                 "${surah.name?.transliteration?.id ?? ''}",
-                                style: TextStyle(color: Colors.white),
+                                style: TextStyle(),
                               ),
                               subtitle: Text(
                                   "${surah.numberOfVerses} Ayat ╽ ${surah.revelation?.id}",
-                                  style: TextStyle(color: Colors.white)),
+                                  style: TextStyle()),
                               trailing: Text("${surah.name?.short}",
                                   style: TextStyle(color: Colors.white)),
                             );

@@ -1,3 +1,4 @@
+import 'package:alquran/colors.dart';
 import 'package:alquran/landingpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,6 +14,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+      theme: appCerah,
       debugShowCheckedModeBanner: false,
       home: landingpage(),
     );
