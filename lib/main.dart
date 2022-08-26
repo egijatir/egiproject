@@ -1,4 +1,5 @@
 import 'package:alquran/colors.dart';
+import 'package:alquran/home.dart';
 import 'package:alquran/landingpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       theme: appCerah,
       debugShowCheckedModeBanner: false,
-      home: landingpage(),
+      home: Home(),
     );
   }
 }

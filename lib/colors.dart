@@ -10,6 +10,9 @@ const appLight = Color(0xFF9345F2);
 const appOrange = Color(0xFFE6704A);
 
 ThemeData appCerah = ThemeData(
+    floatingActionButtonTheme:
+        FloatingActionButtonThemeData(backgroundColor: appPurpleDark),
+    brightness: Brightness.light,
     primaryColor: appPurple,
     scaffoldBackgroundColor: appWhite,
     appBarTheme: AppBarTheme(backgroundColor: appPurple),
@@ -18,6 +21,9 @@ ThemeData appCerah = ThemeData(
         bodyText2: TextStyle(color: appPurpleDark)));
 
 ThemeData appDark = ThemeData(
+    floatingActionButtonTheme:
+        FloatingActionButtonThemeData(backgroundColor: appWhite),
+    brightness: Brightness.dark,
     primaryColor: appPurple,
     scaffoldBackgroundColor: appPurpleDark,
     appBarTheme: AppBarTheme(backgroundColor: appPurpleDark),

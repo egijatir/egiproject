@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:alquran/App/Data/Models/surah.dart';
+import 'package:alquran/colors.dart';
 import 'package:alquran/detailtiapsurah.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -31,6 +32,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: Get.isDarkMode ? 0 : 4,
         title: Text("Al Quran App"),
         centerTitle: true,
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
@@ -40,21 +42,22 @@ class _HomeState extends State<Home> {
       body: DefaultTabController(
         length: 3,
         child: Padding(
-          padding: const EdgeInsets.all(20),
+          padding: const EdgeInsets.only(top: 20, left: 10, right: 10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 "Assalamualaikum",
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(
+                  fontSize: 20,
+                ),
               ),
               SizedBox(
                 height: 20,
               ),
               Container(
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [Colors.purpleAccent, Colors.deepPurple]),
+                  gradient: LinearGradient(colors: [appLight, appPurple]),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Material(
@@ -103,11 +106,17 @@ class _HomeState extends State<Home> {
                                 SizedBox(height: 0),
                                 Text(
                                   "Al-Fatihah",
-                                  style: TextStyle(fontSize: 20),
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                  ),
                                 ),
                                 Text(
-                                  "Jus 2 , Ayat 5",
-                                  style: TextStyle(fontSize: 20),
+                                  "Jus 2 | Ayat 5",
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.white,
+                                  ),
                                 )
                               ],
                             ),
@@ -121,6 +130,7 @@ class _HomeState extends State<Home> {
               TabBar(
                   indicatorColor: Color.fromARGB(255, 42, 2, 66),
                   unselectedLabelColor: Colors.grey,
+                  labelColor: Get.isDarkMode ? appWhite : Colors.black,
                   tabs: [
                     Tab(
                       text: "Surah",
@@ -153,27 +163,72 @@ class _HomeState extends State<Home> {
                               onTap: () {
                                 Get.to(DetailTiapSurah(), arguments: surah);
                               },
-                              leading: CircleAvatar(
-                                backgroundColor: Color.fromARGB(255, 42, 2, 66),
-                                child: Text("${surah.number}"),
+                              leading: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.1,
+                                width: MediaQuery.of(context).size.width * 0.1,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                        image: AssetImage("assets/oct.png"))),
+                                child: Center(
+                                    child: Text(
+                                  "${surah.number}",
+                                  style: TextStyle(
+                                      color: Get.isDarkMode
+                                          ? appWhite
+                                          : Colors.black),
+                                )),
                               ),
                               title: Text(
                                 "${surah.name?.transliteration?.id ?? ''}",
                                 style: TextStyle(),
                               ),
                               subtitle: Text(
-                                  "${surah.numberOfVerses} Ayat ╽ ${surah.revelation?.id}",
+                                  "${surah.numberOfVerses} Ayat | ${surah.revelation?.id}",
                                   style: TextStyle()),
                               trailing: Text("${surah.name?.short}",
-                                  style: TextStyle(color: Colors.white)),
+                                  style: TextStyle()),
                             );
                           });
                     }),
-                Text("data"),
+                ListView.builder(
+                  itemCount: 30,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      onTap: () {},
+                      leading: Container(
+                        height: MediaQuery.of(context).size.height * 0.1,
+                        width: MediaQuery.of(context).size.width * 0.1,
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage("assets/oct.png"))),
+                        child: Center(
+                            child: Text(
+                          "${index + 1}",
+                          style: TextStyle(
+                              color: Get.isDarkMode ? appWhite : Colors.black),
+                        )),
+                      ),
+                      title: Text(
+                        "juz ${index + 1}",
+                        style: TextStyle(),
+                      ),
+                    );
+                  },
+                ),
                 Text("data")
               ]))
             ],
           ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.isDarkMode ? Get.changeTheme(appDark) : Get.changeTheme(appCerah);
+        },
+        child: Icon(
+          Icons.color_lens,
+          color: Get.isDarkMode ? appPurpleDark : appWhite,
         ),
       ),
     );
