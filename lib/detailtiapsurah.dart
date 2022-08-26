@@ -8,6 +8,7 @@ import 'package:alquran/App/controllers/home-controller.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:alquran/App/controllers/detail_surah_controller.dart';
+import 'package:alquran/colors.dart';
 
 class DetailTiapSurah extends StatefulWidget {
   const DetailTiapSurah({Key? key}) : super(key: key);
@@ -35,7 +36,10 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
       body: ListView(
         padding: EdgeInsets.all(20),
         children: [
-          Card(
+          Container(
+            decoration: BoxDecoration(
+                gradient: LinearGradient(colors: [appLight, appPurple]),
+                borderRadius: BorderRadius.circular(20)),
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: Column(
@@ -78,7 +82,12 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
                           detail.Verse? ayat = Snapshot.data?.verses?[index];
                           return Column(
                             children: [
-                              Card(
+                              Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: Get.isDarkMode
+                                        ? appPurpleDark
+                                        : Colors.black),
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 30),
@@ -86,9 +95,23 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      CircleAvatar(
+                                      Container(
+                                        height:
+                                            MediaQuery.of(context).size.height *
+                                                0.1,
+                                        width:
+                                            MediaQuery.of(context).size.width *
+                                                0.1,
+                                        decoration: BoxDecoration(
+                                            color: appWhite,
+                                            image: DecorationImage(
+                                                image: AssetImage(
+                                                    "assets/oct.png"))),
                                         child: Text("${index + 1}"),
                                       ),
+                                      // CircleAvatar(
+                                      //
+                                      // ),
                                       Row(
                                         children: [
                                           IconButton(

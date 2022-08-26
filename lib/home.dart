@@ -32,7 +32,6 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: Get.isDarkMode ? 0 : 4,
         title: Text("Al Quran App"),
         centerTitle: true,
         actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
@@ -224,7 +223,9 @@ class _HomeState extends State<Home> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.isDarkMode ? Get.changeTheme(appDark) : Get.changeTheme(appCerah);
+          Get.isDarkMode
+              ? Get.changeTheme(themeDark)
+              : Get.changeTheme(themeLight);
         },
         child: Icon(
           Icons.color_lens,

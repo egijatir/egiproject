@@ -15,9 +15,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      theme: appCerah,
+      theme: themeLight,
+      darkTheme: themeDark,
       debugShowCheckedModeBanner: false,
-      home: Home(),
+      home: landingpage(),
     );
   }
 }
