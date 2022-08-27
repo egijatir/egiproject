@@ -4,8 +4,6 @@ import 'package:alquran/colors.dart';
 import 'package:alquran/detailtiapsurah.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
-import 'package:alquran/App/controllers/home-controller.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 
@@ -160,7 +158,8 @@ class _HomeState extends State<Home> {
                             Surah surah = Snapshot.data![index];
                             return ListTile(
                               onTap: () {
-                                Get.to(DetailTiapSurah(), arguments: surah);
+                                Get.to(() => (DetailTiapSurah()),
+                                    arguments: surah);
                               },
                               leading: Container(
                                 height:

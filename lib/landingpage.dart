@@ -50,10 +50,10 @@ class _landingpageState extends State<landingpage> {
                 width: MediaQuery.of(context).size.width * 1.7,
               ),
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Get.to(Home());
+                Get.to(() => Home());
               },
               child: Text(
                 "Get Started",

@@ -1,7 +1,4 @@
-import 'package:alquran/home.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 
 const appPurple = Color(0xFF431AA1);
 const appPurpleDark = Color(0xFF1E0771);

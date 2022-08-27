@@ -3,7 +3,6 @@ import 'package:alquran/App/Data/Models/detailsurah.dart' as detail;
 import 'package:alquran/detailtiapsurah.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:alquran/App/controllers/home-controller.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
@@ -31,6 +30,7 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text("SURAH ${surah.name?.transliteration?.id?.toUpperCase()}"),
       ),
       body: ListView(
@@ -46,13 +46,16 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
                 children: [
                   Text(
                     "SURAH ${surah.name?.transliteration?.id?.toUpperCase()}",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: appWhite),
                   ),
                   Text("SURAH ${surah.name?.translation?.id?.toUpperCase()}",
-                      style: TextStyle(fontSize: 14)),
+                      style: TextStyle(fontSize: 14, color: appWhite)),
                   Text(
-                      "SURAH ${surah.numberOfVerses} , Ayat ${surah.revelation}",
-                      style: TextStyle(fontSize: 12)),
+                      "SURAH ${surah.numberOfVerses} , Ayat ${surah.revelation?.id}",
+                      style: TextStyle(fontSize: 12, color: Colors.grey)),
                 ],
               ),
             ),
@@ -60,102 +63,109 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
           SizedBox(
             height: 20,
           ),
-          Expanded(
-              child: FutureBuilder<detail.DetailSurah>(
-                  future: _DetailTiapSurahState.getDetailSurah(
-                      surah.number.toString()),
-                  builder: (context, Snapshot) {
-                    if (Snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    if (!Snapshot.hasData) {
-                      return Text("Ga ada Data");
-                    }
+          FutureBuilder<detail.DetailSurah>(
+              future:
+                  _DetailTiapSurahState.getDetailSurah(surah.number.toString()),
+              builder: (context, Snapshot) {
+                if (Snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (!Snapshot.hasData) {
+                  return Text("Ga ada Data");
+                }
 
-                    return ListView.builder(
-                        shrinkWrap: true,
-                        physics: NeverScrollableScrollPhysics(),
-                        itemCount: Snapshot.data?.verses?.length ?? 0,
-                        itemBuilder: (contex, index) {
-                          detail.Verse? ayat = Snapshot.data?.verses?[index];
-                          return Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Get.isDarkMode
-                                        ? appPurpleDark
-                                        : Colors.black),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 30),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                return ListView.builder(
+                    shrinkWrap: true,
+                    physics: NeverScrollableScrollPhysics(),
+                    itemCount: Snapshot.data?.verses?.length ?? 0,
+                    itemBuilder: (contex, index) {
+                      detail.Verse? ayat = Snapshot.data?.verses?[index];
+                      return Column(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(20),
+                                color: Colors.grey[200]),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 1, horizontal: 30),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Container(
+                                    width: 35,
+                                    height: 35,
+                                    decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                            image: AssetImage(
+                                      "assets/oct.png",
+                                    ))),
+                                    child: Center(
+                                        child: Text(
+                                      "${index + 1}",
+                                      style: TextStyle(
+                                          color: Get.isDarkMode
+                                              ? appPurpleDark
+                                              : appWhite),
+                                    )),
+                                  ),
+                                  // CircleAvatar(
+                                  //
+                                  // ),
+                                  Row(
                                     children: [
-                                      Container(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.1,
-                                        width:
-                                            MediaQuery.of(context).size.width *
-                                                0.1,
-                                        decoration: BoxDecoration(
-                                            color: appWhite,
-                                            image: DecorationImage(
-                                                image: AssetImage(
-                                                    "assets/oct.png"))),
-                                        child: Text("${index + 1}"),
-                                      ),
-                                      // CircleAvatar(
-                                      //
-                                      // ),
-                                      Row(
-                                        children: [
-                                          IconButton(
-                                              onPressed: () {},
-                                              icon: Icon(
-                                                  Icons.bookmark_add_outlined)),
-                                          IconButton(
-                                              onPressed: () {},
-                                              icon: Icon(Icons
-                                                  .play_circle_outline_outlined))
-                                        ],
-                                      ),
+                                      IconButton(
+                                          onPressed: () {},
+                                          icon: Icon(
+                                              Icons.bookmark_add_outlined,
+                                              color: Get.isDarkMode
+                                                  ? appPurpleDark
+                                                  : appWhite)),
+                                      IconButton(
+                                          onPressed: () {},
+                                          icon: Icon(
+                                              Icons
+                                                  .play_circle_outline_outlined,
+                                              color: Get.isDarkMode
+                                                  ? appPurpleDark
+                                                  : appWhite))
                                     ],
                                   ),
-                                ),
+                                ],
                               ),
-                              Text(
-                                "${ayat?.text?.arab}",
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                  fontSize: 25,
-                                ),
-                              ),
-                              Text(
-                                "${ayat?.text?.transliteration?.en}",
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                  fontSize: 25,
-                                ),
-                              ),
-                              Text(
-                                "${ayat?.translation?.id}",
-                                textAlign: TextAlign.end,
-                                style: TextStyle(
-                                  fontSize: 25,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 30,
-                              )
-                            ],
-                          );
-                        });
-                  }))
+                            ),
+                          ),
+                          Text(
+                            "${ayat?.text?.arab}",
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                              fontSize: 25,
+                            ),
+                          ),
+                          Text(
+                            "${ayat?.text?.transliteration?.en}",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: 25,
+                            ),
+                          ),
+                          Text(
+                            "${ayat?.translation?.id}",
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                          SizedBox(
+                            height: 30,
+                          )
+                        ],
+                      );
+                    });
+              })
         ],
       ),
     );

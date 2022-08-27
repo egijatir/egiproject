@@ -1,9 +1,5 @@
-import 'package:alquran/App/Data/Models/surah.dart';
-import 'package:alquran/detailtiapsurah.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
-import 'package:alquran/App/controllers/home-controller.dart';
+
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:alquran/App/Data/Models/detailsurah.dart';
