@@ -106,10 +106,7 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
                                     child: Center(
                                         child: Text(
                                       "${index + 1}",
-                                      style: TextStyle(
-                                          color: Get.isDarkMode
-                                              ? appPurpleDark
-                                              : appWhite),
+                                      style: TextStyle(color: appPurpleDark),
                                     )),
                                   ),
                                   // CircleAvatar(
@@ -121,17 +118,13 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
                                           onPressed: () {},
                                           icon: Icon(
                                               Icons.bookmark_add_outlined,
-                                              color: Get.isDarkMode
-                                                  ? appPurpleDark
-                                                  : appWhite)),
+                                              color: appPurpleDark)),
                                       IconButton(
                                           onPressed: () {},
                                           icon: Icon(
                                               Icons
                                                   .play_circle_outline_outlined,
-                                              color: Get.isDarkMode
-                                                  ? appPurpleDark
-                                                  : appWhite))
+                                              color: appPurpleDark))
                                     ],
                                   ),
                                 ],
