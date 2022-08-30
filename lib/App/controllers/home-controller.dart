@@ -7,6 +7,5 @@ class HomeController extends GetxController {
     Uri url = Uri.parse("https://al-quran-pearl.vercel.app/surah/");
     var res = await http.get(url);
     List data = (json.decode(res.body) as Map<String, dynamic>)["data"];
-    print(data);
   }
 }

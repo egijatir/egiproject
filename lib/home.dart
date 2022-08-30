@@ -30,7 +30,7 @@ class _HomeState extends State<Home> {
 
   static Future<List<juz.Juz>> getAllJuz() async {
     List<juz.Juz> allJuz = [];
-    for (int i = 1; i <= 4; i++) {
+    for (int i = 1; i <= 30; i++) {
       Uri url = await Uri.parse("https://al-quran-pearl.vercel.app/juz/${i}");
 
       var res = await http.get(url);

@@ -1,13 +1,9 @@
-import 'package:alquran/App/Data/Models/surah.dart';
-import 'package:alquran/App/Data/Models/detailsurah.dart' as detail;
-import 'package:alquran/detailtiapsurah.dart';
 import 'package:alquran/App/Data/Models/juz.dart' as juz;
-import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
-import 'package:alquran/App/controllers/home-controller.dart';
+
 import 'package:get/get.dart';
-import 'dart:convert';
-import 'package:alquran/App/controllers/detail_surah_controller.dart';
+
 import 'package:alquran/colors.dart';
 
 class DetailTiapJuz extends StatefulWidget {
@@ -27,7 +23,7 @@ class _DetailTiapJuzState extends State<DetailTiapJuz> {
         title: Text("Juz ${semuajuz.juz}"),
       ),
       body: ListView.builder(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         itemCount: semuajuz.verses?.length ?? 0,
         itemBuilder: (context, index) {
           juz.Verses ayat = semuajuz.verses![index];
@@ -46,7 +42,7 @@ class _DetailTiapJuzState extends State<DetailTiapJuz> {
                       Container(
                         width: 35,
                         height: 35,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                             image: DecorationImage(
                                 image: AssetImage(
                           "assets/oct.png",
@@ -61,7 +57,7 @@ class _DetailTiapJuzState extends State<DetailTiapJuz> {
                         children: [
                           IconButton(
                               onPressed: () {},
-                              icon: Icon(Icons.bookmark_add_outlined,
+                              icon: const Icon(Icons.bookmark_add_outlined,
                                   color: appPurpleDark)),
                           IconButton(
                               onPressed: () {},
@@ -82,7 +78,7 @@ class _DetailTiapJuzState extends State<DetailTiapJuz> {
                     Padding(
                       padding: const EdgeInsets.only(left: 20),
                       child: Text(
-                        "${ayat?.text?.arab}",
+                        "${ayat.text?.arab ?? "Error"}",
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           fontSize: 30,
@@ -93,7 +89,7 @@ class _DetailTiapJuzState extends State<DetailTiapJuz> {
                       height: 30,
                     ),
                     Text(
-                      "${ayat?.text?.transliteration?.en}",
+                      "${ayat.text?.transliteration?.en ?? "Error"}",
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 25,
@@ -103,7 +99,7 @@ class _DetailTiapJuzState extends State<DetailTiapJuz> {
                       height: 30,
                     ),
                     Text(
-                      "${ayat?.translation?.id}",
+                      "${ayat.translation?.id ?? "Error"}",
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontSize: 16,

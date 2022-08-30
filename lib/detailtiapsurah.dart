@@ -1,13 +1,14 @@
 import 'package:alquran/App/Data/Models/surah.dart';
 import 'package:alquran/App/Data/Models/detailsurah.dart' as detail;
-import 'package:alquran/detailtiapsurah.dart';
+
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:alquran/App/controllers/home-controller.dart';
+
 import 'package:get/get.dart';
 import 'dart:convert';
-import 'package:alquran/App/controllers/detail_surah_controller.dart';
+
 import 'package:alquran/colors.dart';
+import 'package:just_audio/just_audio.dart';
 
 class DetailTiapSurah extends StatefulWidget {
   const DetailTiapSurah({Key? key}) : super(key: key);
@@ -25,6 +26,32 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
     return detail.DetailSurah.fromJson(data);
   }
 
+  static void playAudio(String? url) async {
+    if (url != null) {
+      try {
+        final player = AudioPlayer();
+        await player.setUrl(url);
+        await player.play();
+      } on PlayerException catch (e) {
+        Get.defaultDialog(
+            title: "terjadi Kesalahan", middleText: e.message.toString());
+      } on PlayerInterruptedException catch (e) {
+        Get.defaultDialog(
+            title: "terjadi Kesalahan",
+            middleText: "Connection aborted: ${e.message}");
+        ;
+      } catch (e) {
+        Get.defaultDialog(
+            title: "terjadi Kesalahan",
+            middleText: "Tidak  Dapat Memutar Audioa");
+      }
+    } else {
+      Get.defaultDialog(
+          title: "terjadi Kesalahan", middleText: "Url Audio Salah");
+    }
+  }
+
+  //
   final Surah surah = Get.arguments;
   @override
   Widget build(BuildContext context) {
@@ -117,7 +144,10 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
                                               Icons.bookmark_add_outlined,
                                               color: appPurpleDark)),
                                       IconButton(
-                                          onPressed: () {},
+                                          onPressed: () {
+                                            _DetailTiapSurahState.playAudio(
+                                                ayat?.audio?.primary);
+                                          },
                                           icon: Icon(
                                               Icons
                                                   .play_circle_outline_outlined,
