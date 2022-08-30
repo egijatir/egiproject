@@ -263,7 +263,7 @@ class _HomeState extends State<Home> {
                         });
                   },
                 ),
-                Text("data")
+                Center(child: Text("data"))
               ]))
             ],
           ),
