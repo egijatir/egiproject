@@ -15,6 +15,7 @@ class DetailTiapSurah extends StatefulWidget {
 }
 
 class _DetailTiapSurahState extends State<DetailTiapSurah> {
+  static RxString kondisiAudio = "stop".obs;
   final player = AudioPlayer();
   static Future<detail.DetailSurah> getDetailSurah(String id) async {
     Uri url = Uri.parse("https://al-quran-pearl.vercel.app/surah/$id");
@@ -24,11 +25,64 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
     return detail.DetailSurah.fromJson(data);
   }
 
+  void pauseAudio() async {
+    try {
+      await player.pause();
+      kondisiAudio.value = "pause";
+    } on PlayerException catch (e) {
+      Get.defaultDialog(
+          title: "Terjadi Kesalahan", middleText: e.message.toString());
+    } on PlayerInterruptedException catch (e) {
+      Get.defaultDialog(title: "Terjadi Kesalahan", middleText: "${e.message}");
+      ;
+    } catch (e) {
+      Get.defaultDialog(
+          title: "Terjadi Kesalahan", middleText: "Tidak  Dapat Memutar Audio");
+    }
+  }
+
+  void stopAudio() async {
+    try {
+      await player.stop();
+      kondisiAudio.value = "stop";
+    } on PlayerException catch (e) {
+      Get.defaultDialog(
+          title: "Terjadi Kesalahan", middleText: e.message.toString());
+    } on PlayerInterruptedException catch (e) {
+      Get.defaultDialog(title: "Terjadi Kesalahan", middleText: "${e.message}");
+      ;
+    } catch (e) {
+      Get.defaultDialog(
+          title: "Terjadi Kesalahan", middleText: "Tidak  Dapat Memutar Audio");
+    }
+  }
+
+  void resumeAudio() async {
+    try {
+      kondisiAudio.value = "playing";
+      await player.play();
+      kondisiAudio.value = "stop";
+    } on PlayerException catch (e) {
+      Get.defaultDialog(
+          title: "Terjadi Kesalahan", middleText: e.message.toString());
+    } on PlayerInterruptedException catch (e) {
+      Get.defaultDialog(title: "Terjadi Kesalahan", middleText: "${e.message}");
+      ;
+    } catch (e) {
+      Get.defaultDialog(
+          title: "Terjadi Kesalahan", middleText: "Tidak  Dapat Memutar Audio");
+    }
+  }
+
   void playAudio(String? url) async {
     if (url != null) {
       try {
+        await player.stop();
         await player.setUrl(url);
+        kondisiAudio.value = "playing";
         await player.play();
+        kondisiAudio.value = "stop";
+        await player.stop();
       } on PlayerException catch (e) {
         Get.defaultDialog(
             title: "Terjadi Kesalahan", middleText: e.message.toString());
@@ -139,23 +193,62 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
                                       style: TextStyle(color: appPurpleDark),
                                     )),
                                   ),
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                          onPressed: () {},
-                                          icon: Icon(
-                                              Icons.bookmark_add_outlined,
-                                              color: appPurpleDark)),
-                                      IconButton(
-                                          onPressed: () {
-                                            playAudio(ayat?.audio?.primary);
-                                          },
-                                          icon: Icon(
-                                              Icons
-                                                  .play_circle_outline_outlined,
-                                              color: appPurpleDark))
-                                    ],
-                                  ),
+                                  Obx(
+                                    () => Row(
+                                      children: [
+                                        IconButton(
+                                            onPressed: () {},
+                                            icon: Icon(
+                                                Icons.bookmark_add_outlined,
+                                                color: appPurpleDark)),
+                                        (_DetailTiapSurahState
+                                                    .kondisiAudio.value ==
+                                                "stop")
+                                            ? IconButton(
+                                                onPressed: () {
+                                                  playAudio(
+                                                      ayat?.audio?.primary);
+                                                },
+                                                icon: Icon(
+                                                    Icons
+                                                        .play_circle_outline_outlined,
+                                                    color: appPurpleDark))
+                                            : Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  (_DetailTiapSurahState
+                                                              .kondisiAudio
+                                                              .value ==
+                                                          "playing")
+                                                      ? IconButton(
+                                                          onPressed: () {
+                                                            pauseAudio();
+                                                          },
+                                                          icon: Icon(
+                                                              Icons.pause,
+                                                              color:
+                                                                  appPurpleDark))
+                                                      : IconButton(
+                                                          onPressed: () {
+                                                            resumeAudio();
+                                                          },
+                                                          icon: Icon(
+                                                              Icons
+                                                                  .play_circle_outline_outlined,
+                                                              color:
+                                                                  appPurpleDark)),
+                                                  IconButton(
+                                                      onPressed: () {
+                                                        stopAudio();
+                                                      },
+                                                      icon: Icon(Icons.stop,
+                                                          color:
+                                                              appPurpleDark)),
+                                                ],
+                                              ),
+                                      ],
+                                    ),
+                                  )
                                 ],
                               ),
                             ),
