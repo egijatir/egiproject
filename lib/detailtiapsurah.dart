@@ -90,7 +90,7 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
                                 color: Colors.grey[200]),
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
-                                  vertical: 1, horizontal: 30),
+                                  vertical: 1, horizontal: 20),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -109,9 +109,6 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
                                       style: TextStyle(color: appPurpleDark),
                                     )),
                                   ),
-                                  // CircleAvatar(
-                                  //
-                                  // ),
                                   Row(
                                     children: [
                                       IconButton(
@@ -131,25 +128,40 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
                               ),
                             ),
                           ),
-                          Text(
-                            "${ayat?.text?.arab}",
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                              fontSize: 25,
-                            ),
+                          SizedBox(
+                            height: 10,
                           ),
-                          Text(
-                            "${ayat?.text?.transliteration?.en}",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontSize: 25,
-                            ),
-                          ),
-                          Text(
-                            "${ayat?.translation?.id}",
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontSize: 16,
+                          Container(
+                            child: Column(
+                              children: [
+                                Text(
+                                  "${ayat?.text?.arab}",
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                Text(
+                                  "${ayat?.text?.transliteration?.en}",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontSize: 25,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                Text(
+                                  "${ayat?.translation?.id}",
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                           SizedBox(

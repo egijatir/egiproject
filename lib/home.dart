@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:alquran/App/Data/Models/surah.dart';
+import 'package:alquran/App/Data/Models/juz.dart' as juz;
 import 'package:alquran/colors.dart';
+import 'package:alquran/detailtiapjuz.dart';
 import 'package:alquran/detailtiapsurah.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -24,6 +26,20 @@ class _HomeState extends State<Home> {
     } else {
       return data.map((e) => Surah.fromJson(e)).toList();
     }
+  }
+
+  static Future<List<juz.Juz>> getAllJuz() async {
+    List<juz.Juz> allJuz = [];
+    for (int i = 1; i <= 4; i++) {
+      Uri url = await Uri.parse("https://al-quran-pearl.vercel.app/juz/${i}");
+
+      var res = await http.get(url);
+      Map<String, dynamic> data =
+          (json.decode(res.body) as Map<String, dynamic>)["data"];
+      juz.Juz juzi = juz.Juz.fromJson(data);
+      allJuz.add(juzi);
+    }
+    return allJuz;
   }
 
   @override
@@ -189,29 +205,58 @@ class _HomeState extends State<Home> {
                             );
                           });
                     }),
-                ListView.builder(
-                  itemCount: 30,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      onTap: () {},
-                      leading: Container(
-                        height: MediaQuery.of(context).size.height * 0.1,
-                        width: MediaQuery.of(context).size.width * 0.1,
-                        decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage("assets/oct.png"))),
-                        child: Center(
-                            child: Text(
-                          "${index + 1}",
-                          style: TextStyle(
-                              color: Get.isDarkMode ? appWhite : Colors.black),
-                        )),
-                      ),
-                      title: Text(
-                        "juz ${index + 1}",
-                        style: TextStyle(),
-                      ),
-                    );
+                FutureBuilder<List<juz.Juz>>(
+                  future: _HomeState.getAllJuz(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    if (!snapshot.hasData) {
+                      return Text("Missing Data");
+                    }
+                    return ListView.builder(
+                        itemCount: snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          juz.Juz semuajuz = snapshot.data![index];
+                          return ListTile(
+                            onTap: () {
+                              Get.to(() => (DetailTiapJuz()),
+                                  arguments: semuajuz);
+                            },
+                            leading: Container(
+                              height: MediaQuery.of(context).size.height * 0.1,
+                              width: MediaQuery.of(context).size.width * 0.1,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage("assets/oct.png"))),
+                              child: Center(
+                                  child: Text(
+                                "${index + 1}",
+                                style: TextStyle(
+                                    color: Get.isDarkMode
+                                        ? appWhite
+                                        : Colors.black),
+                              )),
+                            ),
+                            title: Text(
+                              "Juz ${index + 1}",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(),
+                            ),
+                            isThreeLine: true,
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Mulai Dari ${semuajuz.juzStartInfo}",
+                                    style: TextStyle()),
+                                Text("Sampai Dengan ${semuajuz.juzEndInfo}",
+                                    style: TextStyle()),
+                              ],
+                            ),
+                          );
+                        });
                   },
                 ),
                 Text("data")
