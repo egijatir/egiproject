@@ -19,7 +19,6 @@ class Juz {
   Juz.fromJson(Map<String, dynamic> json) {
     juz = json['juz'];
     juzStartSurahNumber = json['juzStartSurahNumber'];
-    juzEndSurahNumber = json['juzEndSurahNumber'];
     juzStartInfo = json['juzStartInfo'];
     juzEndInfo = json['juzEndInfo'];
     totalVerses = json['totalVerses'];

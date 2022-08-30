@@ -1,12 +1,9 @@
 import 'package:alquran/App/Data/Models/surah.dart';
 import 'package:alquran/App/Data/Models/detailsurah.dart' as detail;
-
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'dart:convert';
-
 import 'package:alquran/colors.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -18,6 +15,7 @@ class DetailTiapSurah extends StatefulWidget {
 }
 
 class _DetailTiapSurahState extends State<DetailTiapSurah> {
+  final player = AudioPlayer();
   static Future<detail.DetailSurah> getDetailSurah(String id) async {
     Uri url = Uri.parse("https://al-quran-pearl.vercel.app/surah/$id");
     var res = await http.get(url);
@@ -26,28 +24,31 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
     return detail.DetailSurah.fromJson(data);
   }
 
-  static void playAudio(String? url) async {
+  void playAudio(String? url) async {
     if (url != null) {
       try {
-        final player = AudioPlayer();
         await player.setUrl(url);
         await player.play();
       } on PlayerException catch (e) {
         Get.defaultDialog(
-            title: "terjadi Kesalahan", middleText: e.message.toString());
+            title: "Terjadi Kesalahan", middleText: e.message.toString());
       } on PlayerInterruptedException catch (e) {
         Get.defaultDialog(
-            title: "terjadi Kesalahan",
-            middleText: "Connection aborted: ${e.message}");
+            title: "Terjadi Kesalahan", middleText: "${e.message}");
         ;
       } catch (e) {
         Get.defaultDialog(
-            title: "terjadi Kesalahan",
-            middleText: "Tidak  Dapat Memutar Audioa");
+            title: "Terjadi Kesalahan",
+            middleText: "Tidak  Dapat Memutar Audio");
       }
     } else {
       Get.defaultDialog(
           title: "terjadi Kesalahan", middleText: "Url Audio Salah");
+    }
+    @override
+    void onClosed() {
+      player.stop();
+      player.dispose();
     }
   }
 
@@ -96,7 +97,9 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
               builder: (context, Snapshot) {
                 if (Snapshot.connectionState == ConnectionState.waiting) {
                   return Center(
-                    child: CircularProgressIndicator(),
+                    child: CircularProgressIndicator(
+                      color: Get.isDarkMode ? appWhite : Colors.black,
+                    ),
                   );
                 }
                 if (!Snapshot.hasData) {
@@ -145,8 +148,7 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
                                               color: appPurpleDark)),
                                       IconButton(
                                           onPressed: () {
-                                            _DetailTiapSurahState.playAudio(
-                                                ayat?.audio?.primary);
+                                            playAudio(ayat?.audio?.primary);
                                           },
                                           icon: Icon(
                                               Icons
