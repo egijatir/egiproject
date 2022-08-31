@@ -71,77 +71,159 @@ class _HomeState extends State<Home> {
               SizedBox(
                 height: 20,
               ),
-              Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(colors: [appLight, appPurple]),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(20),
-                    onTap: () {},
-                    child: Container(
-                      height: MediaQuery.of(context).size.height * 0.16,
-                      width: MediaQuery.of(context).size.width * 1,
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            top: 0,
-                            right: 0,
-                            child: Opacity(
-                              opacity: 0.7,
-                              child: Container(
-                                margin: EdgeInsets.only(top: 40),
-                                width: MediaQuery.of(context).size.width * 0.30,
-                                child: Image.asset(
-                                  "assets/quran.png",
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+              FutureBuilder<Map<String, dynamic>?>(
+                future: Homeee().getLastRead(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(colors: [appLight, appPurple]),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Material(
+                        color: Colors.transparent,
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(20),
+                          onTap: () {},
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.16,
+                            width: MediaQuery.of(context).size.width * 1,
+                            child: Stack(
                               children: [
-                                Row(
-                                  children: [
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(
-                                          Icons.menu_book_rounded,
-                                          color: Colors.white,
-                                        )),
-                                    Text("Terakhir Di Baca",
+                                Positioned(
+                                  top: 0,
+                                  right: 0,
+                                  child: Opacity(
+                                    opacity: 0.7,
+                                    child: Container(
+                                      margin: EdgeInsets.only(top: 40),
+                                      width: MediaQuery.of(context).size.width *
+                                          0.30,
+                                      child: Image.asset(
+                                        "assets/quran.png",
+                                        fit: BoxFit.contain,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(15),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          IconButton(
+                                              onPressed: () {},
+                                              icon: Icon(
+                                                Icons.menu_book_rounded,
+                                                color: Colors.white,
+                                              )),
+                                          Text("Terakhir Di Baca",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 20)),
+                                        ],
+                                      ),
+                                      SizedBox(height: 0),
+                                      Text(
+                                        "Loading .....",
                                         style: TextStyle(
-                                            color: Colors.white, fontSize: 20)),
-                                  ],
-                                ),
-                                SizedBox(height: 0),
-                                Text(
-                                  "Al-Fatihah",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white,
+                                          fontSize: 20,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                Text(
-                                  "Jus 2 | Ayat 5",
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                    color: Colors.white,
-                                  ),
-                                )
                               ],
                             ),
                           ),
-                        ],
+                        ),
+                      ),
+                    );
+                    ;
+                  }
+                  Map<String, dynamic>? lastRead = snapshot.data;
+                  return Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(colors: [appLight, appPurple]),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(20),
+                        onTap: () {},
+                        child: Container(
+                          height: MediaQuery.of(context).size.height * 0.16,
+                          width: MediaQuery.of(context).size.width * 1,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                top: 0,
+                                right: 0,
+                                child: Opacity(
+                                  opacity: 0.7,
+                                  child: Container(
+                                    margin: EdgeInsets.only(top: 40),
+                                    width: MediaQuery.of(context).size.width *
+                                        0.30,
+                                    child: Image.asset(
+                                      "assets/quran.png",
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(15),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        IconButton(
+                                            onPressed: () {},
+                                            icon: Icon(
+                                              Icons.menu_book_rounded,
+                                              color: Colors.white,
+                                            )),
+                                        Text("Terakhir Di Baca",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20)),
+                                      ],
+                                    ),
+                                    SizedBox(height: 0),
+                                    if (lastRead != null)
+                                      Text(
+                                        "${lastRead['surah']}",
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    Text(
+                                      lastRead == null
+                                          ? "Belum Ada Data"
+                                          : "Juz ${lastRead['juz']} | Ayat ${lastRead['ayat']}",
+                                      style: TextStyle(
+                                        fontSize: 20,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
               TabBar(
                   indicatorColor: Color.fromARGB(255, 42, 2, 66),
@@ -350,5 +432,15 @@ class Homeee extends GetxController {
     await db.delete("bookmark", where: "id = $id");
     Get.snackbar("Berhasil", "Berhasil Menghapus");
     update();
+  }
+
+  Future<Map<String, dynamic>?> getLastRead() async {
+    Database db = await database.db;
+    List<Map<String, dynamic>> dataLastRead =
+        await db.query("bookmark", where: "last_read == 1");
+    if (dataLastRead.length == 0) {
+      return null;
+    } else {}
+    return dataLastRead.first;
   }
 }
