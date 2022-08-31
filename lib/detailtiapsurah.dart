@@ -1,11 +1,14 @@
+import 'dart:async';
 import 'package:alquran/App/Data/Models/surah.dart';
 import 'package:alquran/App/Data/Models/detailsurah.dart' as detail;
+import 'package:alquran/App/Data/db/bookmark.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
 import 'package:alquran/colors.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:sqflite/sqflite.dart';
 
 class DetailTiapSurah extends StatefulWidget {
   const DetailTiapSurah({Key? key}) : super(key: key);
@@ -23,6 +26,43 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
     Map<String, dynamic> data =
         (json.decode(res.body) as Map<String, dynamic>)["data"];
     return detail.DetailSurah.fromJson(data);
+  }
+
+  DatabaseManager database = DatabaseManager.instance;
+  void addBookmark(bool TerakhirDibaca, detail.DetailSurah surah,
+      detail.Verse ayat, int indexAyat) async {
+    Database db = await database.db;
+    bool flagExist = false;
+    if (TerakhirDibaca == true) {
+      await db.delete("bookmark", where: "last_read= 1");
+    } else {
+      List checkData = await db.query("bookmark",
+          where:
+              "surah = '${surah.name!.transliteration!.id!.replaceAll("'", "")}' and ayat=${ayat.number!.inSurah!} and juz=${ayat.meta!.juz!} and via='surah' and index_ayat=$indexAyat and last_read=0");
+      if (checkData.length != 0) {
+        flagExist = true;
+      }
+    }
+    if (flagExist == false) {
+      await db.insert(
+        "bookmark",
+        {
+          "surah": "${surah.name!.transliteration!.id!.replaceAll("'", "")}",
+          "ayat": ayat.number!.inSurah!,
+          "juz": ayat.meta!.juz!,
+          "via": "surah",
+          "index_ayat": indexAyat,
+          "last_read": TerakhirDibaca == true ? 1 : 0
+        },
+      );
+      Get.back();
+      Get.snackbar("Berhasil", "Berhasil Menambahkan");
+    } else {
+      Get.back();
+      Get.snackbar("Gagal", "Surah Sudah DiTambahkan Sebelumnya");
+    }
+    var data = await db.query("bookmark");
+    print(data);
   }
 
   void pauseAudio() async {
@@ -197,7 +237,43 @@ class _DetailTiapSurahState extends State<DetailTiapSurah> {
                                     () => Row(
                                       children: [
                                         IconButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              Get.defaultDialog(
+                                                  title: "BookMark",
+                                                  middleText:
+                                                      "Pilih Jenis BookMark",
+                                                  actions: [
+                                                    ElevatedButton(
+                                                      onPressed: () {
+                                                        addBookmark(
+                                                            true,
+                                                            Snapshot.data!,
+                                                            ayat!,
+                                                            index);
+                                                      },
+                                                      child: Text(
+                                                          "Terakhir Dibaca"),
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              primary:
+                                                                  appPurple),
+                                                    ),
+                                                    ElevatedButton(
+                                                      onPressed: () {
+                                                        addBookmark(
+                                                            false,
+                                                            Snapshot.data!,
+                                                            ayat!,
+                                                            index);
+                                                      },
+                                                      child: Text("BookMark"),
+                                                      style: ElevatedButton
+                                                          .styleFrom(
+                                                              primary:
+                                                                  appPurple),
+                                                    )
+                                                  ]);
+                                            },
                                             icon: Icon(
                                                 Icons.bookmark_add_outlined,
                                                 color: appPurpleDark)),

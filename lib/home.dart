@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:alquran/App/Data/Models/surah.dart';
 import 'package:alquran/App/Data/Models/juz.dart' as juz;
+import 'package:alquran/App/Data/db/bookmark.dart';
 import 'package:alquran/colors.dart';
 import 'package:alquran/detailtiapjuz.dart';
 import 'package:alquran/detailtiapsurah.dart';
@@ -8,6 +9,8 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'dart:convert';
+
+import 'package:sqflite/sqflite.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -263,7 +266,56 @@ class _HomeState extends State<Home> {
                         });
                   },
                 ),
-                Center(child: Text("data"))
+                FutureBuilder<List<Map<String, dynamic>>>(
+                  future: Homeee().getBookmark(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    if (snapshot.data?.length == 0) {
+                      return Center(
+                        child: Text("BookMark Belum Tersedia"),
+                      );
+                    }
+
+                    return ListView.builder(
+                      itemCount: snapshot.data?.length,
+                      itemBuilder: (context, index) {
+                        Map<String, dynamic> data = snapshot.data![index];
+                        return ListTile(
+                          onTap: () {
+                            print(index);
+                          },
+                          leading: Container(
+                            height: MediaQuery.of(context).size.height * 0.1,
+                            width: MediaQuery.of(context).size.width * 0.1,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage("assets/oct.png"))),
+                            child: Center(
+                                child: Text(
+                              "${index + 1}",
+                              style: TextStyle(
+                                  color:
+                                      Get.isDarkMode ? appWhite : Colors.black),
+                            )),
+                          ),
+                          // leading: CircleAvatar(child: Text("${index + 1}")),
+                          title: Text("${data['surah']}"),
+                          subtitle:
+                              Text("Ayat ${data['ayat']} | Juz ${data['juz']}"),
+                          trailing: IconButton(
+                              onPressed: () {
+                                Homeee().deleteBookmark(data['id']);
+                              },
+                              icon: Icon(Icons.delete)),
+                        );
+                      },
+                    );
+                  },
+                ),
               ]))
             ],
           ),
@@ -281,5 +333,22 @@ class _HomeState extends State<Home> {
         ),
       ),
     );
+  }
+}
+
+class Homeee extends GetxController {
+  DatabaseManager database = DatabaseManager.instance;
+  Future<List<Map<String, dynamic>>> getBookmark() async {
+    Database db = await database.db;
+    List<Map<String, dynamic>> allbookmarks =
+        await db.query("bookmark", where: "last_read == 0");
+    return allbookmarks;
+  }
+
+  deleteBookmark(int id) async {
+    Database db = await database.db;
+    await db.delete("bookmark", where: "id = $id");
+    Get.snackbar("Berhasil", "Berhasil Menghapus");
+    update();
   }
 }
